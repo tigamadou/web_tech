@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>New Page</title>
+</head>
+<body>
+    <section class="container">
+    <% require 'pg' %>
+    <% connection = PG::connect(dbname: "goya") %>
+    <% connection.internal_encoding = "UTF-8" %>
+    <% result = connection.exec("select * from crops;") %>
+    <% data = [] %>
+    <% result.each do |record| %>
+      <%  data << "The size of bitter gourd：#{record["weight"]}　Who sold：#{record["give_for"]}" %>
+    <% end %>
+        <form action="goya.cgi" method="POST">
+            <input type="hidden" name="goya" value="<%= data.join(' ') %>">
+           <button>Click to see Details</button>
+         </form>
+    </section>
+</body>
+</html>
